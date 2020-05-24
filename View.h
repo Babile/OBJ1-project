@@ -3,10 +3,11 @@
 
 class View {
 private:
+	char* pScreenArray;
 	int screenWidth, screenHeight;
 public:
 	View();
-	void printOnScreen();
+	void printOnScreen(int mouseX, int mouseY);
 	bool updateScreenSize();
 };
 
