@@ -4,17 +4,21 @@
 HANDLE mHandle;
 INPUT_RECORD inBuf[32];
 DWORD events = 0;
+MouseKeyState mouseStates[2];
+bool oldMouseLeftClick = false;
+bool oldMouseRightClick = false;
 
 Mouse::Mouse() {
 	this->mouseX = 0;
 	this->mouseY = 0;
 	mHandle = GetStdHandle(STD_INPUT_HANDLE);
 	GetNumberOfConsoleInputEvents(mHandle, &events);
+	
 }
 
-void Mouse::calculatePosition() {
+void Mouse::calculateMousePositionAndClick() {
 	if (!SetConsoleMode(mHandle, ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT)) {
-
+		//todo error hendler
 	}
 
 	if (events > 0) {
@@ -34,11 +38,49 @@ void Mouse::calculatePosition() {
 						this->mouseY = inBuf[i].Event.MouseEvent.dwMousePosition.Y;
 					}
 					break;
-
 					case 0: {
-						for (int m = 0; m < 5; m++)
-							this->mouseNewState[m] = (inBuf[i].Event.MouseEvent.dwButtonState & (1 << m)) > 0;
-
+						if (inBuf[i].Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
+							this->mouseLeftClick = true;
+							if (!oldMouseLeftClick && this->mouseLeftClick) {
+								mouseStates[0].bPressed = true;
+								mouseStates[0].bReleased = false;
+								oldMouseLeftClick = true;
+							}
+							else if (oldMouseLeftClick && this->mouseLeftClick) {
+								mouseStates[0].bPressed = true;
+								mouseStates[0].bHeld = true;
+								mouseStates[0].bReleased = false;
+							}
+							else if (oldMouseLeftClick && !this->mouseLeftClick) {
+								mouseStates[0].bPressed = false;
+								mouseStates[0].bHeld = false;
+								mouseStates[0].bReleased = true;
+								oldMouseLeftClick = false;
+							}
+						}
+						else if (inBuf[i].Event.MouseEvent.dwButtonState == RIGHTMOST_BUTTON_PRESSED) {
+							this->mouseRightClick = true;
+							if (!oldMouseRightClick && this->mouseRightClick) {
+								mouseStates[1].bPressed = true;
+								mouseStates[1].bReleased = false;
+								oldMouseRightClick = true;
+							}
+							else if (oldMouseRightClick && this->mouseRightClick) {
+								mouseStates[1].bPressed = true;
+								mouseStates[1].bHeld = true;
+								mouseStates[1].bReleased = false;
+							}
+							else if (oldMouseRightClick && !this->mouseRightClick) {
+								mouseStates[1].bPressed = false;
+								mouseStates[1].bHeld = false;
+								mouseStates[1].bReleased = true;
+								oldMouseRightClick = false;
+							}
+						}
+						else {
+							this->mouseLeftClick = false;
+							this->mouseRightClick = false;
+						}
 					}
 					break;
 
@@ -51,29 +93,6 @@ void Mouse::calculatePosition() {
 				break;
 		}
 	}
-
-	/*for (int m = 0; m < 5; m++)
-	{
-		m_mouse[m].bPressed = false;
-		m_mouse[m].bReleased = false;
-
-		if (mouseNewState[m] != m_mouseOldState[m])
-		{
-			if (m_mouseNewState[m])
-			{
-				m_mouse[m].bPressed = true;
-				m_mouse[m].bHeld = true;
-			}
-			else
-			{
-				m_mouse[m].bReleased = true;
-				m_mouse[m].bHeld = false;
-			}
-		}
-
-		m_mouseOldState[m] = m_mouseNewState[m];
-	}*/
-
 }
 
 int Mouse::getMouseX() {
@@ -82,4 +101,20 @@ int Mouse::getMouseX() {
 
 int Mouse::getMouseY() {
 	return this->mouseY;
+}
+
+bool Mouse::getMouseLeftClick() {
+	return this->mouseLeftClick;
+}
+
+bool Mouse::getMouseRightClick() {
+	return this->mouseRightClick;
+}
+
+bool Mouse::getMouseConsoleInFocus() {
+	return this->mouseConsoleInFocus;
+}
+
+MouseKeyState Mouse::getMouseState(int whichButton) {
+	return mouseStates[whichButton];
 }
