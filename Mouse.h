@@ -2,9 +2,9 @@
 #define MOUSE_H
 
 struct MouseKeyState {
-	bool bPressed;
-	bool bReleased;
-	bool bHeld;
+	bool bPressed = false;
+	bool bReleased = false;
+	bool bHeld = false;
 };
 
 class Mouse {
@@ -25,4 +25,4 @@ public:
 	MouseKeyState getMouseState(int whichButton);
 };
 
-#endif // !MOUSE_H
+#endif

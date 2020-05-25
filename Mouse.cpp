@@ -80,6 +80,11 @@ void Mouse::calculateMousePositionAndClick() {
 						else {
 							this->mouseLeftClick = false;
 							this->mouseRightClick = false;
+							for (int i = 0; i < 2; i++) {
+								mouseStates[i].bPressed = false;
+								mouseStates[i].bHeld = false;
+								mouseStates[i].bReleased = false;
+							}
 						}
 					}
 					break;

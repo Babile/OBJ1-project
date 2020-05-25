@@ -19,8 +19,12 @@ void GameManager::startAplication() {
 			printController->gatherInformation(mouseController->getMouseX(), mouseController->getMouseY(), mouseController->getMouseState(0).bHeld, false);
 			printController->printOnScreen();
 		}
+		else if (mouseController->getMouseRightClick() && mouseController->getMouseState(1).bHeld) {
+			printController->gatherInformation(mouseController->getMouseX(), mouseController->getMouseY(), false, mouseController->getMouseState(1).bHeld);
+			printController->printOnScreen();
+		}
 		else {
-			printController->gatherInformation(mouseController->getMouseX(), mouseController->getMouseY(), mouseController->getMouseState(0).bHeld, false);
+			printController->gatherInformation(mouseController->getMouseX(), mouseController->getMouseY(), false, false);
 			printController->printOnScreen();
 		}
 		printController->updateScreenSize();

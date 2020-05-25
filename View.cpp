@@ -7,6 +7,7 @@ int mouseXCord = 0, mouseYCord = 0;
 int newMouseXCord = 0, newMouseYCord = 0;
 bool mouseLeftHold = false;
 bool mouseRightHold = false;
+bool pass = false;
 
 View::View() {
 	SetConsoleActiveScreenBuffer(hConsole);
@@ -21,8 +22,12 @@ View::View() {
 void View::printOnScreen() {
 	for (int i = 0; i < this->screenHeight; i++) {
 		for (int j = 0; j < this->screenWidth; j++) {
-			if (mouseXCord == j && mouseYCord == i && mouseLeftHold) {
-				pScreenArray[i * screenWidth + j] = '@';
+			//to do select in other way
+			if (((mouseYCord == i && (j >= mouseXCord && j <= newMouseXCord)) ||
+				(mouseXCord == j && (i >= mouseYCord && i <= newMouseYCord)) ||
+				(newMouseYCord == i && (j >= mouseXCord && j <= newMouseXCord)) ||
+				(newMouseXCord == j && (i >= mouseYCord && i <= newMouseYCord))) && mouseLeftHold) {
+				pScreenArray[i * screenWidth + j] = (unsigned char)(176);
 			}
 			else {
 				pScreenArray[i * screenWidth + j] = ' ';
@@ -55,8 +60,16 @@ bool View::updateScreenSize() {
 }
 
 void View::gatherInformation(int mouseX, int mouseY, bool buttonLeftHold, bool buttonRightHold) {
-	mouseXCord = mouseX;
-	mouseYCord = mouseY;
+	newMouseXCord = mouseX;
+	newMouseYCord = mouseY;
+	if (buttonLeftHold && !pass) {
+		mouseXCord = mouseX;
+		mouseYCord = mouseY;
+		pass = true;
+	}
+	else if (!buttonLeftHold && pass) {
+		pass = false;
+	}
 	mouseLeftHold = buttonLeftHold;
 	mouseRightHold = buttonRightHold;
 }
