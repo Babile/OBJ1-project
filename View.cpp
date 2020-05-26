@@ -1,13 +1,16 @@
 #include "View.h"
+#include "GameManager.h"
 #include <Windows.h>
 
 HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
 DWORD dwBytesWritten = 0;
+
 int mouseXCord = 0, mouseYCord = 0;
 int newMouseXCord = 0, newMouseYCord = 0;
 bool mouseLeftHold = false;
 bool mouseRightHold = false;
 bool pass = false;
+bool unitPrint = false;
 
 View::View() {
 	SetConsoleActiveScreenBuffer(hConsole);
@@ -22,6 +25,13 @@ View::View() {
 void View::printOnScreen() {
 	for (int i = 0; i < this->screenHeight; i++) {
 		for (int j = 0; j < this->screenWidth; j++) {
+			unitPrint = false;
+			for (int k = 0; k < units.size(); k++) {
+				if (j == units[k]->gerCordX() && i == units[k]->getCordY()) {
+					pScreenArray[i * screenWidth + j] = (unsigned char)(157);
+					unitPrint = true;
+				}
+			}
 			//to do select in other way
 			if (((mouseYCord == i && (j >= mouseXCord && j <= newMouseXCord)) ||
 				(mouseXCord == j && (i >= mouseYCord && i <= newMouseYCord)) ||
@@ -30,7 +40,9 @@ void View::printOnScreen() {
 				pScreenArray[i * screenWidth + j] = (unsigned char)(176);
 			}
 			else {
-				pScreenArray[i * screenWidth + j] = ' ';
+				if (!unitPrint) {
+					pScreenArray[i * screenWidth + j] = ' ';
+				}
 			}
 		}
 	}

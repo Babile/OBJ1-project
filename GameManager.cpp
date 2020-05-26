@@ -1,15 +1,18 @@
 #include "GameManager.h"
 #include "View.h"
 #include "Mouse.h"
-#include <vector>
+#include "Hero.h"
+#include "Controller.h"
 
 View *printController;
 Mouse* mouseController;
-//std::vector<> units = new std::vector<>();
+Controller* controller;
+std::vector<BaseUnit*> units;
 
 GameManager::GameManager() {
 	printController = new View();
 	mouseController = new Mouse();
+	controller = new Controller();
 }
 
 void GameManager::startAplication() {
@@ -22,6 +25,7 @@ void GameManager::startAplication() {
 		else if (mouseController->getMouseRightClick() && mouseController->getMouseState(1).bHeld) {
 			printController->gatherInformation(mouseController->getMouseX(), mouseController->getMouseY(), false, mouseController->getMouseState(1).bHeld);
 			printController->printOnScreen();
+			units.push_back(new Hero(mouseController->getMouseX(), mouseController->getMouseY(), "Hero", 5500, 5));
 		}
 		else {
 			printController->gatherInformation(mouseController->getMouseX(), mouseController->getMouseY(), false, false);
@@ -35,4 +39,10 @@ void GameManager::startAplication() {
 void GameManager::clearBeforeClose() {
 	delete printController;
 	delete mouseController;
+
+	for (auto& i : units) {
+		delete i;
+	}
+
+	units.clear();
 }
