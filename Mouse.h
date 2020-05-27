@@ -14,6 +14,7 @@ private:
 	bool mouseLeftClick = false;
 	bool mouseRightClick = false;
 	bool mouseConsoleInFocus = true;
+	MouseKeyState mouseStates[2];
 public:
 	Mouse();
 	void calculateMousePositionAndClick();

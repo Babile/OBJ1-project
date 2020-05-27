@@ -14,7 +14,7 @@ BaseUnit::BaseUnit(int cordX, int cordY, std::string name) {
     this->selected = false;
 }
 
-int BaseUnit::gerCordX() {
+int BaseUnit::getCordX() {
     return this->cordX;
 }
 
@@ -36,6 +36,14 @@ bool BaseUnit::getSelected() {
 
 void BaseUnit::setSelected(bool select) {
     this->selected = select;
+}
+
+bool BaseUnit::getMoving() {
+    return this->moving;
+}
+
+void BaseUnit::setMoving(bool move) {
+    this->moving = move;
 }
 
 std::string BaseUnit::getName() {

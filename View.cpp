@@ -27,7 +27,7 @@ void View::printOnScreen() {
 		for (int j = 0; j < this->screenWidth; j++) {
 			unitPrint = false;
 			for (int k = 0; k < units.size(); k++) {
-				if (j == units[k]->gerCordX() && i == units[k]->getCordY()) {
+				if (j == units.at(k)->getCordX() && i == units.at(k)->getCordY()) {
 					pScreenArray[i * screenWidth + j] = (unsigned char)(157);
 					unitPrint = true;
 				}

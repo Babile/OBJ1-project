@@ -7,6 +7,8 @@
 extern std::vector<BaseUnit*> units;
 
 class GameManager {
+private:
+	bool gameRunning;
 public: 
 	GameManager();
 	void startAplication();

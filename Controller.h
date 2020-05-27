@@ -4,6 +4,7 @@
 class Controller {
 public:
 	Controller();
-	void mouveUnits(int mouseCordX, int mouseCordY, bool mouseLeftClick, bool mouseLeftHold, bool mouseLeftReleased, bool mouseRightClick, bool mouseRightHold, bool mouseRightReleased);
+	void mouveUnits(int mouseCordX, int mouseCordY);
 };
+
 #endif 
