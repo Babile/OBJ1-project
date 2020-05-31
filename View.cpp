@@ -8,8 +8,7 @@ DWORD dwBytesWritten = 0;
 int mouseXCord = 0, mouseYCord = 0;
 int newMouseXCord = 0, newMouseYCord = 0;
 bool mouseLeftHold = false;
-bool mouseRightHold = false;
-bool pass = false;
+bool mouseFirstLeftClick = false;
 bool unitPrint = false;
 
 View::View() {
@@ -30,6 +29,7 @@ void View::printOnScreen() {
 				if (j == units.at(k)->getCordX() && i == units.at(k)->getCordY()) {
 					pScreenArray[i * screenWidth + j] = (unsigned char)(157);
 					unitPrint = true;
+					break;
 				}
 			}
 			//to do select in other way
@@ -46,7 +46,6 @@ void View::printOnScreen() {
 			}
 		}
 	}
-
 	WriteConsoleOutputCharacter(hConsole, this->pScreenArray, this->screenWidth * this->screenHeight, { 0,0 }, &dwBytesWritten);
 }
 
@@ -71,17 +70,16 @@ bool View::updateScreenSize() {
 	return false;
 }
 
-void View::gatherInformation(int mouseX, int mouseY, bool buttonLeftHold, bool buttonRightHold) {
+void View::gatherInformation(int mouseX, int mouseY, bool buttonLeftHold) {
 	newMouseXCord = mouseX;
 	newMouseYCord = mouseY;
-	if (buttonLeftHold && !pass) {
+	if (buttonLeftHold && !mouseFirstLeftClick) {
 		mouseXCord = mouseX;
 		mouseYCord = mouseY;
-		pass = true;
+		mouseFirstLeftClick = true;
 	}
-	else if (!buttonLeftHold && pass) {
-		pass = false;
+	else if (!buttonLeftHold && mouseFirstLeftClick) {
+		mouseFirstLeftClick = false;
 	}
 	mouseLeftHold = buttonLeftHold;
-	mouseRightHold = buttonRightHold;
 }

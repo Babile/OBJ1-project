@@ -9,7 +9,7 @@ public:
 	View();
 	void printOnScreen();
 	bool updateScreenSize();
-	void gatherInformation(int mouseX, int mouseY, bool buttonLeftHold, bool buttonRightHold);
+	void gatherInformation(int mouseX, int mouseY, bool buttonLeftHold);
 };
 
 #endif

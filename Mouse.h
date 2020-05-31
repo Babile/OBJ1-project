@@ -2,17 +2,17 @@
 #define MOUSE_H
 
 struct MouseKeyState {
-	bool bPressed = false;
-	bool bReleased = false;
-	bool bHeld = false;
+	bool pressed = false;
+	bool released = false;
+	bool hold = false;
 };
 
 class Mouse {
 private:
 	int mouseX;
 	int mouseY;
-	bool mouseLeftClick = false;
-	bool mouseRightClick = false;
+	bool mouseOldState[2] = { 0 };
+	bool mouseNewState[2] = { 0 };
 	bool mouseConsoleInFocus = true;
 	MouseKeyState mouseStates[2];
 public:
@@ -20,8 +20,6 @@ public:
 	void calculateMousePositionAndClick();
 	int getMouseX();
 	int getMouseY();
-	bool getMouseLeftClick();
-	bool getMouseRightClick();
 	bool getMouseConsoleInFocus();
 	MouseKeyState getMouseState(int whichButton);
 };
