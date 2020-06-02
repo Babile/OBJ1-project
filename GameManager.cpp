@@ -10,14 +10,15 @@
 #include <string>
 #include <algorithm>
 
+const int LEFTMOUSEBTN = 0, RIGHTMOUSEBTN = 1;
+
 View *printController;
 Mouse* mouseController;
 Controller* unitsController;
 std::vector<BaseUnit*> units;
+
 bool spondState = true;
 bool safeRightButtonPress = false;
-int oldMouseCordX = 0, oldMouseCordY = 0;
-const int LEFTMOUSEBTN = 0, RIGHTMOUSEBTN = 1;
 
 void saveGame();
 void loadGame();
@@ -158,31 +159,37 @@ void loadGame() {
 		return;
 	}
 
-	std::string fileData;
-	std::string args;
-	std::vector<std::string> temp;
-	int counter = 0;
+	try {
+		std::string fileData;
+		std::string args;
+		std::vector<std::string> temp;
+		int counter = 0;
 
-	while (std::getline(file, fileData)) {
-		for (int i = 0; i < fileData.length(); i++) {
-			if (fileData[i] == ',') {
-				temp.push_back(args);
-				args = "";
+		while (std::getline(file, fileData)) {
+			for (int i = 0; i < fileData.length(); i++) {
+				if (fileData[i] == ',') {
+					temp.push_back(args);
+					args = "";
+				}
+				else {
+					args += fileData[i];
+				}
 			}
-			else {
-				args += fileData[i];
-			}
+			
+			temp.push_back(args);
+
+			units.push_back(new Hero(stringToNumber<int>(temp.at(0)), stringToNumber<int>(temp.at(1)), temp.at(6), 5500, 5));
+
+			units[counter]->setDestinationClickCordX(stringToNumber<int>(temp.at(2)));
+			units[counter]->setDestinationClickCordY(stringToNumber<int>(temp.at(3)));
+			units[counter]->setMoving(stringToNumber<int>(temp.at(4)));
+			units[counter]->setSelected(stringToNumber<int>(temp.at(5)));
+
+			temp.empty();
+			counter++;
 		}
-		temp.push_back(args);
-
-		units.push_back(new Hero(stringToNumber<int>(temp.at(0)), stringToNumber<int>(temp.at(1)), temp.at(6), 5500, 5));
-
-		units[counter]->setDestinationClickCordX(stringToNumber<int>(temp.at(2)));
-		units[counter]->setDestinationClickCordY(stringToNumber<int>(temp.at(3)));
-		units[counter]->setMoving(stringToNumber<int>(temp.at(4)));
-		units[counter]->setSelected(stringToNumber<int>(temp.at(5)));
-
-		temp.empty();
-		counter++;
+	}
+	catch (const std::exception& e) {
+		e.what();
 	}
 }
