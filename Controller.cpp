@@ -19,17 +19,17 @@ void Controller::mouveUnits() {
 	for (int i = 0; i < units.size(); i++) {
 		//red
 		if (units.at(i)->getDestinationClickCordX() > units.at(i)->getCordX()) {
-			gameSpeedX = 0.5f;
+			gameSpeedX = 1.5f;
 		}
 		else if (units.at(i)->getDestinationClickCordX() < units.at(i)->getCordX()) {
-			gameSpeedX = -0.5f;
+			gameSpeedX = -1.5f;
 		}
 		//kolona
 		if (units.at(i)->getDestinationClickCordY() > units.at(i)->getCordY()) {
-			gameSpeedY = 0.5f;
+			gameSpeedY = 1.5f;
 		}
 		else if (units.at(i)->getDestinationClickCordY() < units.at(i)->getCordY()) {
-			gameSpeedY = -0.5f;
+			gameSpeedY = -1.5f;
 		}
 
 		if (units.at(i)->getDestinationClickCordX() == units.at(i)->getCordX() && units.at(i)->getDestinationClickCordY() == units.at(i)->getCordY()) {
@@ -38,10 +38,10 @@ void Controller::mouveUnits() {
 
 		if (units.at(i)->getMoving()) {
 			if (units.at(i)->getDestinationClickCordX() != units.at(i)->getCordX()) {
-				units.at(i)->setCordX(units.at(i)->getCordX() + (gameSpeedX * fElapsedTime));
+				units.at(i)->setCordX(units.at(i)->getCordX() + (int)(gameSpeedX * fElapsedTime));
 			}
 			if (units.at(i)->getDestinationClickCordY() != units.at(i)->getCordY()) {
-				units.at(i)->setCordY(units.at(i)->getCordY() + (gameSpeedY * fElapsedTime));
+				units.at(i)->setCordY(units.at(i)->getCordY() + (int)(gameSpeedY * fElapsedTime));
 			}
 		}
 	}

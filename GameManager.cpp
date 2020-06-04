@@ -62,7 +62,7 @@ void GameManager::startAplication() {
 		}
 
 		else {
-			//spondState = true;
+			spondState = true;
 			mouseController->calculateMousePositionAndClick();
 
 			if (mouseController->getMouseState(LEFTMOUSEBTN).pressed) {
@@ -88,10 +88,10 @@ void GameManager::startAplication() {
 						spondState = false;
 					}
 				}
-				//if (spondState) {
+				if (spondState) {
 					units.push_back(new Hero(mouseController->getMouseX(), mouseController->getMouseY(), "Hero", 5500, 5));
 					spondState = false;
-				//}
+				}
 				/*if (spondState) {
 					if (units.size() == 0) {
 						
@@ -177,7 +177,7 @@ void loadGame() {
 			}
 			
 			temp.push_back(args);
-
+			args = "";
 			units.push_back(new Hero(stringToNumber<int>(temp.at(0)), stringToNumber<int>(temp.at(1)), temp.at(6), 5500, 5));
 
 			units[counter]->setDestinationClickCordX(stringToNumber<int>(temp.at(2)));
@@ -185,7 +185,7 @@ void loadGame() {
 			units[counter]->setMoving(stringToNumber<int>(temp.at(4)));
 			units[counter]->setSelected(stringToNumber<int>(temp.at(5)));
 
-			temp.empty();
+			temp = std::vector<std::string>();
 			counter++;
 		}
 	}
