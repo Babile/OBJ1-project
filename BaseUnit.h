@@ -10,6 +10,7 @@ protected:
 	bool moving;
 	std::string name;
 public:
+	static int unitCount;
 	BaseUnit();
 	BaseUnit(int cordX, int cordY, std::string name);
 	int getCordX();

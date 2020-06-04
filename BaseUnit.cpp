@@ -1,5 +1,7 @@
 #include "BaseUnit.h"
 
+int BaseUnit::unitCount = 0;
+
 BaseUnit::BaseUnit() {
     this->cordX = 0;
     this->cordY = 0;

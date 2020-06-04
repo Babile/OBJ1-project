@@ -10,7 +10,6 @@ Mouse::Mouse() {
 	this->mouseY = 0;
 	mHandle = GetStdHandle(STD_INPUT_HANDLE);
 	GetNumberOfConsoleInputEvents(mHandle, &events);
-	
 }
 
 void Mouse::calculateMousePositionAndClick() {

@@ -27,7 +27,7 @@ void View::printOnScreen() {
 			unitPrint = false;
 			for (int k = 0; k < units.size(); k++) {
 				if (j == units.at(k)->getCordX() && i == units.at(k)->getCordY()) {
-					pScreenArray[i * screenWidth + j] = (unsigned char)(157);
+					this->pScreenArray[i * screenWidth + j] = (unsigned char)(157);
 					unitPrint = true;
 					break;
 				}
@@ -37,15 +37,16 @@ void View::printOnScreen() {
 				(mouseXCord == j && (i >= mouseYCord && i <= newMouseYCord)) ||
 				(newMouseYCord == i && (j >= mouseXCord && j <= newMouseXCord)) ||
 				(newMouseXCord == j && (i >= mouseYCord && i <= newMouseYCord))) && mouseLeftHold) {
-				pScreenArray[i * screenWidth + j] = (unsigned char)(176);
+				this->pScreenArray[i * screenWidth + j] = (unsigned char)(176);
 			}
 			else {
 				if (!unitPrint) {
-					pScreenArray[i * screenWidth + j] = ' ';
+					this->pScreenArray[i * screenWidth + j] = ' ';
 				}
 			}
 		}
 	}
+	wsprintf(&this->pScreenArray[this->screenWidth], "Units created: %d", BaseUnit::unitCount);
 	WriteConsoleOutputCharacter(hConsole, this->pScreenArray, this->screenWidth * this->screenHeight, { 0,0 }, &dwBytesWritten);
 }
 

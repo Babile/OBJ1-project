@@ -90,6 +90,7 @@ void GameManager::startAplication() {
 				}
 				if (spondState) {
 					units.push_back(new Hero(mouseController->getMouseX(), mouseController->getMouseY(), "Hero", 5500, 5));
+					BaseUnit::unitCount++;
 					spondState = false;
 				}
 				/*if (spondState) {
@@ -188,6 +189,7 @@ void loadGame() {
 			temp = std::vector<std::string>();
 			counter++;
 		}
+		BaseUnit::unitCount = counter;
 	}
 	catch (const std::exception& e) {
 		e.what();
