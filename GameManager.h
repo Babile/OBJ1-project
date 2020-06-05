@@ -9,10 +9,12 @@ extern std::vector<BaseUnit*> units;
 class GameManager {
 private:
 	bool gameRunning;
+	void gameThread();
+	void clearBeforeClose();
 public: 
 	GameManager();
 	void startAplication();
-	void clearBeforeClose();
+	
 };
 
 #endif

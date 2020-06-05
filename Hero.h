@@ -7,6 +7,7 @@ private:
 	int experience, level;
 public:
 	Hero(int x, int y, std::string string, int ex, int lvl);
+	Hero& operator +=(const Hero& rhs);
 };
 
 #endif

@@ -9,6 +9,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <thread>
 
 const int LEFTMOUSEBTN = 0, RIGHTMOUSEBTN = 1;
 
@@ -45,83 +46,8 @@ GameManager::GameManager() {
 }
 
 void GameManager::startAplication() {
-	while (this->gameRunning) {
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
-			this->gameRunning = false;
-		}
-		else if (GetAsyncKeyState(VK_TAB) & 0x8000) {
-			saveGame();
-		}
-		else if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
-			if (!units.empty()) {
-				sort(units.begin(), units.end());
-			}
-		}
-		else if (GetAsyncKeyState(VK_MENU) & 0x8000) {
-			loadGame();
-		}
-
-		else {
-			spondState = true;
-			mouseController->calculateMousePositionAndClick();
-
-			if (mouseController->getMouseState(LEFTMOUSEBTN).pressed) {
-				if (mouseController->getMouseState(LEFTMOUSEBTN).hold) {
-					printController->gatherInformation(mouseController->getMouseX(), mouseController->getMouseY(), mouseController->getMouseState(LEFTMOUSEBTN).hold);
-				}
-				for (int i = 0; i < units.size(); i++) {
-					if (mouseController->getMouseX() == units.at(i)->getCordX() && mouseController->getMouseY() == units.at(i)->getCordY()) {
-						units.at(i)->setSelected(true);
-					}
-					else {
-						units.at(i)->setSelected(false);
-					}
-				}
-			}
-
-			else if (mouseController->getMouseState(RIGHTMOUSEBTN).pressed) {
-				for (int i = 0; i < units.size(); i++) {
-					if (units.at(i)->getSelected()) {
-						units.at(i)->setMoving(true);
-						units.at(i)->setMoveCordX(mouseController->getMouseX());
-						units.at(i)->setMoveCordY(mouseController->getMouseY());
-						spondState = false;
-					}
-				}
-				if (spondState) {
-					units.push_back(new Hero(mouseController->getMouseX(), mouseController->getMouseY(), "Hero", 5500, 5));
-					BaseUnit::unitCount++;
-					spondState = false;
-				}
-				/*if (spondState) {
-					if (units.size() == 0) {
-						
-					}
-					else if (units.size() > 0) {
-						for (int i = 0; i < units.size(); i++) {
-							for (int j = i + 1; j <= units.size() - 1; j++) {
-								if (units.at(i)->getCordX() == units.at(j)->getCordX() && units.at(i)->getCordY() == units.at(j)->getCordY()) {
-									spondState = false;
-								}
-							}
-							if (spondState) {
-								units.push_back(new Hero(mouseController->getMouseX(), mouseController->getMouseY(), "Hero", 5500, 5));
-								spondState = false;
-							}
-						}
-					}
-				}*/
-			}
-			else {
-				printController->gatherInformation(mouseController->getMouseX(), mouseController->getMouseY(), false);
-			}
-			
-		}
-		printController->printOnScreen();
-		unitsController->mouveUnits();
-		printController->updateScreenSize();
-	}
-	clearBeforeClose();
+	std::thread t = std::thread(&GameManager::gameThread, this);
+	t.join();
 }
 
 void GameManager::clearBeforeClose() {
@@ -133,7 +59,7 @@ void GameManager::clearBeforeClose() {
 		delete i;
 	}
 
-	units.clear();
+	units = std::vector<BaseUnit*>();
 }
 
 void saveGame() {
@@ -194,4 +120,69 @@ void loadGame() {
 	catch (const std::exception& e) {
 		e.what();
 	}
+}
+
+void GameManager::gameThread() {
+	while (this->gameRunning) {
+		//ESC to exit game
+		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+			this->gameRunning = false;
+		}
+		//Tab key for save game
+		else if (GetAsyncKeyState(VK_TAB) & 0x8000) {
+			saveGame();
+		}
+		//Shift key for sort array
+		else if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+			if (!units.empty()) {
+				sort(units.begin(), units.end());
+			}
+		}
+		//ALT key for load saved game
+		else if (GetAsyncKeyState(VK_MENU) & 0x8000) {
+			loadGame();
+		}
+
+		else {
+			spondState = true;
+			mouseController->calculateMousePositionAndClick();
+
+			if (mouseController->getMouseState(LEFTMOUSEBTN).pressed) {
+				if (mouseController->getMouseState(LEFTMOUSEBTN).hold) {
+					printController->gatherInformation(mouseController->getMouseX(), mouseController->getMouseY(), mouseController->getMouseState(LEFTMOUSEBTN).hold);
+				}
+				for (int i = 0; i < units.size(); i++) {
+					if (mouseController->getMouseX() == units.at(i)->getCordX() && mouseController->getMouseY() == units.at(i)->getCordY()) {
+						units.at(i)->setSelected(true);
+					}
+					else {
+						units.at(i)->setSelected(false);
+					}
+				}
+			}
+			else if (mouseController->getMouseState(RIGHTMOUSEBTN).pressed) {
+				for (int i = 0; i < units.size(); i++) {
+					if (units.at(i)->getSelected()) {
+						units.at(i)->setMoving(true);
+						units.at(i)->setMoveCordX(mouseController->getMouseX());
+						units.at(i)->setMoveCordY(mouseController->getMouseY());
+						spondState = false;
+					}
+				}
+				if (spondState) {
+					units.push_back(new Hero(mouseController->getMouseX(), mouseController->getMouseY(), "Hero", 5500, 5));
+					BaseUnit::unitCount++;
+					spondState = false;
+				}
+			}
+			else {
+				printController->gatherInformation(mouseController->getMouseX(), mouseController->getMouseY(), false);
+			}
+
+		}
+		printController->printOnScreen();
+		unitsController->mouveUnits();
+		printController->updateScreenSize();
+	}
+	clearBeforeClose();
 }

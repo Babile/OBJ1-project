@@ -17,14 +17,14 @@ void Controller::mouveUnits() {
 	fElapsedTime = elapsedTime.count();
 
 	for (int i = 0; i < units.size(); i++) {
-		//red
+		//row
 		if (units.at(i)->getDestinationClickCordX() > units.at(i)->getCordX()) {
 			gameSpeedX = 1.5f;
 		}
 		else if (units.at(i)->getDestinationClickCordX() < units.at(i)->getCordX()) {
 			gameSpeedX = -1.5f;
 		}
-		//kolona
+		//column
 		if (units.at(i)->getDestinationClickCordY() > units.at(i)->getCordY()) {
 			gameSpeedY = 1.5f;
 		}

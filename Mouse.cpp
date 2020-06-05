@@ -23,10 +23,9 @@ void Mouse::calculateMousePositionAndClick() {
 	
 	for (DWORD i = 0; i < events; i++) {
 		switch (inBuf[i].EventType) {
-			case FOCUS_EVENT: {
+			case FOCUS_EVENT: 
 				this->mouseConsoleInFocus = inBuf[i].Event.FocusEvent.bSetFocus;
-			}
-			break;
+				break;
 			case MOUSE_EVENT: {
 				switch (inBuf[i].Event.MouseEvent.dwEventFlags) {
 					case MOUSE_MOVED: {
